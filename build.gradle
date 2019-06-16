@@ -1,0 +1,122 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+}
+
+group 'com.betomorrow.gradle'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compileOnly gradleApi()
+
+    // Third Party
+    compile 'com.google.api-client:google-api-client:1.27.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.27.0'
+    compile 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
+    compile 'org.apache.poi:poi-ooxml:4.0.1'
+
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+    testCompile 'org.assertj:assertj-core:3.11.1'
+    testCompile gradleTestKit()
+
+    testRuntime 'cglib:cglib-nodep:3.2.4'       // allows mocking of classes (in addition to interfaces)
+    testRuntime 'org.objenesis:objenesis:2.4'   // allows mocking of classes without default constructor (together with CGLIB)
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+/**
+ * Integration Tests
+ */
+
+sourceSets {
+    integrationTest {
+        java.srcDir file('src/integration-test/java')
+        kotlin.srcDir file('src/integration-test/kotlin')
+        resources.srcDir file('src/integration-test/resources')
+
+        compileClasspath += main.output + configurations.integrationTestRuntime
+        runtimeClasspath += output + configurations.integrationTestRuntime
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestCompileOnly.extendsFrom testCompileOnly
+    integrationTestRuntime.extendsFrom testRuntime
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+    integrationTestAnnotationProcessor.extendsFrom testAnnotationProcessor
+}
+
+compileIntegrationTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+task integrationTest(type: Test, group: JavaBasePlugin.VERIFICATION_GROUP) {
+    description = 'Run the integration tests.'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    outputs.upToDateWhen { false }
+    mustRunAfter test
+
+    useJUnitPlatform()
+}
+
+check.dependsOn integrationTest
+
+gradlePlugin {
+    testSourceSets sourceSets.integrationTest
+}
+
+
+/**
+ * Publishing
+ */
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    archiveClassifier.set('sources')
+}
+
+publishing {
+    publications {
+        BintrayPublication(MavenPublication) {
+            from components.java
+            artifact sourceJar
+        }
+    }
+}
+
+
+/**
+ * Gradle Wrapper
+ */
+
+wrapper {
+    gradleVersion = '5.4.1'
+    distributionType = Wrapper.DistributionType.ALL
+}

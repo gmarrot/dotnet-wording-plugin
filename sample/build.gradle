@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'com.betomorrow.gradle:dotnet-wording-plugin:1.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'com.betomorrow.dotnet.wording'
+
+/**
+ * Wording
+ */
+
+wording {
+    sheetId = "1xIZpaIsHMr1U6uuI6ox8kOPoH6O9A91aiVw21OYVyDQ"
+    keysColumn = "A"
+}
+
+
+/**
+ * Gradle Wrapper
+ */
+
+wrapper {
+    gradleVersion = '5.4.1'
+}
