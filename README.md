@@ -6,11 +6,20 @@ This plugin allow you to manage .Net application's wording with a simple Google 
 
 ## Requirements
 
-As this plugin has been written in Kotlin, it requires Gradle 4.9+ to work.
+As this plugin has been written in Kotlin and use particular features of the language, it requires Gradle 5.0+ to work.
 
 ## Quick Start
 
-First, you need to apply the plugin in your `build.gradle`.
+You can create a Google Sheet for your application's wording with one column for keys, one optionally for comments and columns for languages like this :
+
+| Keys          | Comments              | English    | French |
+|---------------|-----------------------|------------|--------|
+| UserFirstName | The user's first name | First Name | Prénom |
+| UserLastName  | The user's last name  | Last Name  | Nom    |
+
+You can find a sample [here](https://docs.google.com/spreadsheets/d/1xIZpaIsHMr1U6uuI6ox8kOPoH6O9A91aiVw21OYVyDQ/edit#gid=0).
+
+In your project, you need to apply the plugin in your `build.gradle`.
 
 ```groovy
 plugins {
@@ -37,7 +46,41 @@ buildscript {
 apply plugin: "com.betomorrow.dotnet.wording"
 ```
 
-TODO
+Then you can declare your wording configuration :
+
+```groovy
+wording {
+    sheetId = "1xIZpaIsHMr1U6uuI6ox8kOPoH6O9A91aiVw21OYVyDQ"
+
+    keysColumn = "A"
+
+    languages {
+        "default" {
+            output = "WordingSampleApp/Resources/StringResources.resx"
+            column = "C"
+        }
+        "fr" {
+            output = "WordingSampleApp/Resources/StringResources.fr.resx"
+            column = "D"
+        }
+    }
+}
+```
+
+At this step, you can run the wording's upgrade : `./gradlew upgradeWording`.
+
+The first time you launch this command, the plugin will ask you to grant access on Google Sheet.
+
+```bash
+> Task :downloadWording
+Please open the following address in your browser:
+  https://accounts.google.com/o/oauth2/auth?access_type=offline&client_id=470805092329-2ecth74ds608pet9b711flfk43s43478.apps.googleusercontent.com&redirect_uri=http://localhost:8888/Callback&response_type=code&scope=https://www.googleapis.com/auth/drive
+Attempting to open that address in the default browser now...
+```
+
+You will see an [authorization request](https://github.com/gmarrot/dotnet-wording-plugin/blob/master/images/authorization_request.png) in your browser. You have to accept it to allow the plugin to download the wording file.
+
+The plugin will finally update wording files. In this sample, `WordingSampleApp/Resources/StringResources.resx` and `WordingSampleApp/Resources/StringResources.fr.resx`.
 
 ## Tasks
 
@@ -51,4 +94,36 @@ It also creates tasks for each defined languages : updateWordingDefault, updateW
 
 ## Complete DSL
 
-TODO
+```groovy
+wording {
+    credentials = "credentials.json"    // Optional, default : use provided credentials  
+    clientId = ""                       // Optional, default : use provided credentials  
+    clientSecret = ""                   // Optional, default : use provided credentials  
+
+    sheetId = "THE SHEET ID"            // *Required*
+    sheetNames = ["commons", "app"]     // Optional, default: use all sheets of the file
+    filename = "wording.xlsx"           // Optional, default: "wording.xlsx"
+    keysColumn = "A"                    // Optional, default: "A"
+    commentsColumn = ""                 // Optional, default: null
+
+    skipHeaders = true                  // Skip headers. Optional, default: true
+    addMissingKeys = true               // Add missing key from sheet in wording files. If false, it will throw errors on default wording file when missing keys. Optional, default: true
+
+    languages {
+        'default' {
+            output "src/main/res/values/strings.xml" // Path and name of the wording file for the language. *Required*
+            column = "B"                             // Column of the language's wording. *Required*
+        }
+        'fr' {
+            output = "src/main/res/values-es/strings.xml" // Path and name of the wording file for the language. *Required*
+            column = "C"                             // Column of the language's wording. *Required*
+        }
+        // [...] Add more languages here
+    }
+}
+
+```
+
+## Note
+
+The plugin includes Google Projet credentials for convenience use but you can setup your own projet. Create new project in [GCP Console](https://console.cloud.google.com) then enable **Drive API** in *API library* and create credentials. You can use `credentials.json` file or `clientId` / `clientSecret`.

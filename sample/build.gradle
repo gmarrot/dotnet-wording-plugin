@@ -16,7 +16,26 @@ apply plugin: 'com.betomorrow.dotnet.wording'
 
 wording {
     sheetId = "1xIZpaIsHMr1U6uuI6ox8kOPoH6O9A91aiVw21OYVyDQ"
+
     keysColumn = "A"
+    commentsColumn = "B"
+
+    addMissingKeys = true
+
+    languages {
+        "default" {
+            output = "WordingSampleApp/Resources/StringResources.resx"
+            column = "C"
+        }
+        "fr" {
+            output = "WordingSampleApp/Resources/StringResources.fr.resx"
+            column = "D"
+        }
+        "es" {
+            output = "WordingSampleApp/Resources/StringResources.es.resx"
+            column = "E"
+        }
+    }
 }
 
 
@@ -25,5 +44,5 @@ wording {
  */
 
 wrapper {
-    gradleVersion = '5.4.1'
+    gradleVersion = '5.0'
 }

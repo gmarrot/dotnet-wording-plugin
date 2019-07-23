@@ -14,7 +14,7 @@ class WordingPluginIntTest {
     @Rule
     val testProjectDir = TemporaryFolder()
 
-    lateinit var buildFile: File
+    private lateinit var buildFile: File
 
     @BeforeEach
     fun setUp() {
@@ -54,11 +54,11 @@ class WordingPluginIntTest {
                         column = "C"
                     }
                     'fr' {
-                        output = "SampleApp/Res/values-fr/StringResources.fr.resx"
+                        output = "SampleApp/Res/StringResources.fr.resx"
                         column = "D"
                     }
                     'es' {
-                        output = "SampleApp/Res/values-es/StringResources.es.resx"
+                        output = "SampleApp/Res/StringResources.es.resx"
                         column = "E"
                     }
                 }
