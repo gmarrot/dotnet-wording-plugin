@@ -27,15 +27,6 @@ class WordingPluginIntTest {
                 id 'com.betomorrow.dotnet.wording'
             }
 
-            """.trimIndent()
-        )
-    }
-
-    @Test
-    fun `test plugin should be applied successfully`() {
-        // Given
-        buildFile.appendText(
-            """
             wording {
                 credentials = "~/.credentials.json"
 
@@ -65,7 +56,10 @@ class WordingPluginIntTest {
             }
             """.trimIndent()
         )
+    }
 
+    @Test
+    fun `test plugin should be applied successfully and create downloadWording, updateWording and upgradeWording tasks`() {
         // When
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
@@ -77,12 +71,86 @@ class WordingPluginIntTest {
         // Then
         assertThat(result.task(":tasks")!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-        assertThat(result.output).contains("downloadWording -")
-        assertThat(result.output).contains("updateWording -")
-        assertThat(result.output).contains("updateWordingDefault -")
-        assertThat(result.output).contains("updateWordingFr -")
-        assertThat(result.output).contains("updateWordingEs -")
-        assertThat(result.output).contains("upgradeWording -")
+        assertThat(result.output).contains(
+            "downloadWording -",
+            "updateWording -",
+            "updateWordingDefault -",
+            "updateWordingFr -",
+            "updateWordingEs -",
+            "upgradeWording -"
+        )
+    }
+
+    @Test
+    fun `test plugin should be applied successfully with Gradle 5_0`() {
+        // When
+        val result = GradleRunner.create()
+            .withGradleVersion("5.0")
+            .withProjectDir(testProjectDir.root)
+            .withArguments("tasks", "--stacktrace", "--all")
+            .withPluginClasspath()
+            .withDebug(true)
+            .build()
+
+        // Then
+        assertThat(result.task(":tasks")!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+        assertThat(result.output).contains(
+            "downloadWording -",
+            "updateWording -",
+            "updateWordingDefault -",
+            "updateWordingFr -",
+            "updateWordingEs -",
+            "upgradeWording -"
+        )
+    }
+
+    @Test
+    fun `test updateWording task should depend on all updateWordingLanguage tasks`() {
+        // When
+        val result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("updateWording", "-dry-run", "--quiet")
+            .withPluginClasspath()
+            .withDebug(true)
+            .build()
+
+        // Then
+        assertThat(result.output).contains(
+            """
+            :updateWordingDefault SKIPPED
+            :updateWordingEs SKIPPED
+            :updateWordingFr SKIPPED
+            :updateWording SKIPPED
+            """.trimIndent()
+        )
+        assertThat(result.output).doesNotContain(
+            ":downloadWording",
+            ":upgradeWording"
+        )
+    }
+
+    @Test
+    fun `test upgradeWording task should depend on downloadWording and updateWording tasks`() {
+        // When
+        val result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("upgradeWording", "-dry-run", "-quiet")
+            .withPluginClasspath()
+            .withDebug(true)
+            .build()
+
+        // Then
+        assertThat(result.output).contains(
+            """
+            :downloadWording SKIPPED
+            :updateWordingDefault SKIPPED
+            :updateWordingEs SKIPPED
+            :updateWordingFr SKIPPED
+            :updateWording SKIPPED
+            :upgradeWording SKIPPED
+            """.trimIndent()
+        )
     }
 
 }

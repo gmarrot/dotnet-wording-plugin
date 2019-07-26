@@ -8,7 +8,7 @@ class XlsxExtractor(private val path: String, private val keysColumn: Column, pr
     fun extract(language: Language, sheetNames: List<String> = emptyList()): Wording {
         val wording = MutableWording(language)
 
-        val workbook = WorkbookFactory.create(File(path))
+        val workbook = WorkbookFactory.create(File(path), null, true)
 
         val sheetIterator = if (sheetNames.isEmpty()) {
             workbook.sheetIterator()
