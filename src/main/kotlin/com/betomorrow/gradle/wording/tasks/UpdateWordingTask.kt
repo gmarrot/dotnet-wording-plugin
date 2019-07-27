@@ -2,9 +2,7 @@ package com.betomorrow.gradle.wording.tasks
 
 import com.betomorrow.gradle.wording.domain.*
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 import java.io.File
 
 open class UpdateWordingTask : DefaultTask() {
@@ -15,15 +13,34 @@ open class UpdateWordingTask : DefaultTask() {
     @OutputFile
     lateinit var outputFile: File
 
+    @Input
     lateinit var languageName: String
-    var skipHeaders: Boolean = true
+
+    @Input
     lateinit var keysColumn: String
+
+    @Input
     lateinit var valuesColumn: String
+
+    @Input
+    @Optional
     var commentsColumn: String? = null
 
+    @Input
+    var skipHeaders: Boolean = true
+
+    @Input
+    @Optional
     var sheetNames = emptyList<String>()
+
+    @Input
     var failOnMissingKeys = false
+
+    @Input
     var addMissingKeys = false
+
+    @Input
+    var removeNonExistingKeys = false
 
     @TaskAction
     fun update() {
@@ -35,7 +52,7 @@ open class UpdateWordingTask : DefaultTask() {
         logger.info("Updating wording for $languageName to $outputFile.")
 
         val wording = extractor.extract(language, sheetNames)
-        val updatedKeys = updater.update(wording, addMissingKeys)
+        val updatedKeys = updater.update(wording, addMissingKeys, removeNonExistingKeys)
 
         val missingKeys = wording.keys - updatedKeys
         if (missingKeys.isNotEmpty() && failOnMissingKeys) {

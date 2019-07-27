@@ -3,28 +3,30 @@ package com.betomorrow.gradle.wording.tasks
 import com.betomorrow.gradle.wording.infra.drive.DriveMimeType
 import com.betomorrow.gradle.wording.infra.drive.GoogleDrive
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 import java.io.File
 
 open class DownloadWordingTask : DefaultTask() {
 
+    @Input
     @Optional
     var clientId: String? = null
 
+    @Input
     @Optional
     var clientSecret: String? = null
 
+    @InputFile
     @Optional
     var credentials: File? = null
 
+    @Input
     lateinit var fileId: String
 
     @OutputFile
     lateinit var output: File
 
-    val tokenDirectory: String
+    private val tokenDirectory: String
         get() {
             return project.projectDir
                 .resolve(".gradle")

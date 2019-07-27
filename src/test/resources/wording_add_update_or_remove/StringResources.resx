@@ -13,19 +13,15 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="key1" xml:space="preserve">
-        <value>Another value 1</value>
-        <comment>Comment 1</comment>
-    </data>
-    <data name="key2" xml:space="preserve">
-        <value>Another value 2</value>
-        <comment>Bad comment 2</comment>
+        <value>Bad value 1</value>
+        <comment>Bad comment 1</comment>
     </data>
     <data name="unknown_key" xml:space="preserve">
         <value>Value</value>
         <comment>Comment</comment>
     </data>
-    <data name="key3" xml:space="preserve">
-        <value>Another value 3</value>
-        <comment>Comment 3</comment>
+    <data name="key2" xml:space="preserve">
+        <value>Bad value 2</value>
+        <comment>Bad comment 2</comment>
     </data>
 </root>

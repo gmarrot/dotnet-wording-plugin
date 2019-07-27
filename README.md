@@ -107,7 +107,8 @@ wording {
     commentsColumn = ""                 // Optional, default: null
 
     skipHeaders = true                  // Skip headers. Optional, default: true
-    addMissingKeys = true               // Add missing key from sheet in wording files. If false, it will throw errors on default wording file when missing keys. Optional, default: true
+    addMissingKeys = false              // Add missing key from sheet in wording files. If false, it will throw errors on default wording file when missing keys. Optional, default: false
+    removeNonExistingKeys = false       // Remove wording from resx files that not exist in Google Sheet. Optional, default: false
 
     languages {
         'default' {

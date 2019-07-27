@@ -19,11 +19,15 @@ open class WordingPluginExtension(val project: Project) {
     var skipHeaders: Boolean = true
 
     var filename: String = "wording.xlsx"
+    val wordingFile: File
+        get() = project.rootDir.resolve(filename)
 
     var keysColumn: String = "A"
     var commentsColumn: String? = null
 
     var addMissingKeys: Boolean = false
+
+    var removeNonExistingKeys: Boolean = false
 
     var languages: NamedDomainObjectContainer<WordingLanguageExtension> =
         project.container(WordingLanguageExtension::class.java) {
@@ -33,8 +37,5 @@ open class WordingPluginExtension(val project: Project) {
     fun languages(action: Action<NamedDomainObjectContainer<WordingLanguageExtension>>) {
         action.execute(languages)
     }
-
-    val wordingFile: File
-        get() = project.rootDir.resolve(filename)
 
 }

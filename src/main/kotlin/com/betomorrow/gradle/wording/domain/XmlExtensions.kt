@@ -152,6 +152,10 @@ fun Node.getAttribute(name: String): String {
     return this.attributes.getNamedItem(name).nodeValue
 }
 
+fun Node.removeFromParent(): Node {
+    return this.parentNode.removeChild(this)
+}
+
 
 /**
  * Element Extensions
@@ -182,4 +186,12 @@ fun Element.appendTextNode(name: String): Text {
     appendChild(elt)
 
     return elt
+}
+
+fun Element.removeChildren(name: String) {
+    this.getElementsByTagName(name).let { nodes ->
+        for (i in 0 until nodes.length) {
+            nodes.item(i).removeFromParent()
+        }
+    }
 }

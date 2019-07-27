@@ -47,14 +47,15 @@ class WordingPlugin : Plugin<Project> {
                         t.outputFile = language.outputFile
 
                         t.languageName = languageName
-                        t.skipHeaders = wordingExtension.skipHeaders
                         t.keysColumn = wordingExtension.keysColumn
                         t.valuesColumn = language.column
                         t.commentsColumn = wordingExtension.commentsColumn
 
+                        t.skipHeaders = wordingExtension.skipHeaders
                         t.sheetNames = wordingExtension.sheetNames
                         t.failOnMissingKeys = language.isDefault
                         t.addMissingKeys = wordingExtension.addMissingKeys
+                        t.removeNonExistingKeys = wordingExtension.removeNonExistingKeys
                     }.get()
 
                     task.mustRunAfter(downloadWordingTask)

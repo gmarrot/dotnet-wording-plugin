@@ -20,7 +20,10 @@ wording {
     keysColumn = "A"
     commentsColumn = "B"
 
+    sheetNames = ["Sheet 1", "Sheet 2"]
+
     addMissingKeys = true
+    removeNonExistingKeys = true
 
     languages {
         "default" {

@@ -1,6 +1,7 @@
 package com.betomorrow.gradle.wording.domain
 
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.gradle.internal.impldep.org.junit.Rule
 import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder
 import org.junit.jupiter.api.BeforeEach
@@ -22,13 +23,13 @@ class ResxUpdaterTest {
     }
 
     @Test
-    fun `test update should update existing wording`() {
+    fun `test update should only update existing wording when wording file exists and addMissingWording is false`() {
         // Given
-        val source = "src/test/resources/StringResources.resx"
-        val expected = "src/test/resources/StringResources-expected.resx"
+        val source = "src/test/resources/wording_update/StringResources.resx"
+        val expected = "src/test/resources/wording_update/StringResources-expected.resx"
 
         testProjectDir.create()
-        val copy = Paths.get(testProjectDir.root.absolutePath, "TestUpdateExistingWording.resx")
+        val copy = Paths.get(testProjectDir.root.absolutePath, "TestUpdateWording.resx")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
         val updater = ResxUpdater(copy.toString())
@@ -37,40 +38,21 @@ class ResxUpdaterTest {
         updater.update(MutableWording(language).apply {
             addOrUpdate("key1", "Another value 1", "Comment 1")
             addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", null)
             addOrUpdate("key3", "Another value 3", "Comment 3")
             addOrUpdate("key4", "Another Value 4", "Comment 4")
-        }, false)
+        }, addMissingWordings = false, removeNonExistingWording = false)
 
         // Then
-        Assertions.assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameContentAs(Paths.get(expected))
     }
 
     @Test
-    fun `test update should create non-existing wording`() {
-        val expected = "src/test/resources/New-StringResources-expected.resx"
+    fun `test update should update existing wording and add missing ones when rex file exists and addMissingWording is true`() {
+        val source = "src/test/resources/wording_add_or_update/StringResources.resx"
+        val expected = "src/test/resources/wording_add_or_update/StringResources-expected.resx"
 
         testProjectDir.create()
-        val dest = Paths.get(testProjectDir.root.absolutePath, "TestCreateWording.resx")
-
-        val updater = ResxUpdater(dest.toString())
-
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-        }, true)
-
-        Assertions.assertThat(dest).hasSameContentAs(Paths.get(expected))
-    }
-
-    @Test
-    fun `test update should update existing wording and add missing ones`() {
-        val source = "src/test/resources/Partial-StringResources.resx"
-        val expected = "src/test/resources/Partial-StringResources-expected.resx"
-
-        testProjectDir.create()
-        val copy = Paths.get(testProjectDir.root.absolutePath, "TestPartialUpdateWording.resx")
+        val copy = Paths.get(testProjectDir.root.absolutePath, "TestAddOrUpdateWording.resx")
         Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
 
         val updater = ResxUpdater(copy.toString())
@@ -79,9 +61,76 @@ class ResxUpdaterTest {
             addOrUpdate("key1", "Another value 1", "Comment 1")
             addOrUpdate("key2", "Another value 2", null)
             addOrUpdate("key3", "Another value 3", "Comment 3")
-        }, true)
+        }, addMissingWordings = true, removeNonExistingWording = false)
 
         Assertions.assertThat(copy).hasSameContentAs(Paths.get(expected))
+    }
+
+    @Test
+    fun `test update should update existing wording and remove non-existing ones when removeNonExistingWording is true`() {
+        // Given
+        val source = "src/test/resources/wording_update_or_remove/StringResources.resx"
+        val expected = "src/test/resources/wording_update_or_remove/StringResources-expected.resx"
+
+        testProjectDir.create()
+        val copy = Paths.get(testProjectDir.root.absolutePath, "TestAddOrUpdateWording.resx")
+        Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
+
+        val updater = ResxUpdater(copy.toString())
+
+        // When
+        updater.update(MutableWording(language).apply {
+            addOrUpdate("key1", "Another value 1", "Comment 1")
+            addOrUpdate("key2", "Another value 2", null)
+            addOrUpdate("key3", "Another value 3", "Comment 3")
+        }, addMissingWordings = false, removeNonExistingWording = true)
+
+        // Then
+        assertThat(copy).hasSameContentAs(Paths.get(expected))
+    }
+
+    @Test
+    fun `test update should update existing wording and add missing ones and remove non-existing ones when addMissingWording and removeNonExistingWording are true`() {
+        // Given
+        val source = "src/test/resources/wording_add_update_or_remove/StringResources.resx"
+        val expected = "src/test/resources/wording_add_update_or_remove/StringResources-expected.resx"
+
+        testProjectDir.create()
+        val copy = Paths.get(testProjectDir.root.absolutePath, "TestAddOrUpdateWording.resx")
+        Files.copy(Paths.get(source), copy, StandardCopyOption.REPLACE_EXISTING)
+
+        val updater = ResxUpdater(copy.toString())
+
+        // When
+        updater.update(MutableWording(language).apply {
+            addOrUpdate("key1", "Another value 1", "Comment 1")
+            addOrUpdate("key2", "Another value 2", null)
+            addOrUpdate("key3", "Another value 3", "Comment 3")
+        }, addMissingWordings = true, removeNonExistingWording = true)
+
+        // Then
+        assertThat(copy).hasSameContentAs(Paths.get(expected))
+    }
+
+    @Test
+    fun `test update should create non-existing wording when resx file does not exists and addMissingWording is true`() {
+        // Given
+        val expected = "src/test/resources/wording_creation/StringResources-expected.resx"
+
+        testProjectDir.create()
+        val dest = Paths.get(testProjectDir.root.absolutePath, "TestCreateWording.resx")
+
+        val updater = ResxUpdater(dest.toString())
+
+        // When
+        updater.update(MutableWording(language).apply {
+            addOrUpdate("key1", "Another value 1", "Comment 1")
+            addOrUpdate("key2", "Another value 2", null)
+            addOrUpdate("key3", "Another value 3", "Comment 3")
+        }, addMissingWordings = true, removeNonExistingWording = false)
+
+        // Then
+        assertThat(dest).hasSameContentAs(Paths.get(expected))
     }
 
 }

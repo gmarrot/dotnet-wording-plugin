@@ -2,15 +2,14 @@ package com.betomorrow.gradle.wording.domain
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element
+import org.w3c.dom.Node
 
 class ResxUpdater(private val path: String) {
 
-    fun update(wording: Wording, addMissingWordings: Boolean): Set<String> {
-        val outputKeys = HashSet<String>()
-
+    fun update(wording: Wording, addMissingWordings: Boolean, removeNonExistingWording: Boolean): Set<String> {
         val document = loadOrCreateResxDocument(path)
 
-        updateData(document, wording, outputKeys)
+        val outputKeys = updateData(document, wording, removeNonExistingWording)
 
         if (addMissingWordings) {
             val missingWordings = wording.keys - outputKeys
@@ -25,41 +24,61 @@ class ResxUpdater(private val path: String) {
         return outputKeys
     }
 
-    private fun updateData(document: Document, wording: Wording, outputKeys: HashSet<String>) {
+    private fun updateData(document: Document, wording: Wording, removeNonExistingWording: Boolean): MutableSet<String> {
+        val updatedKeys = hashSetOf<String>()
+        val nonExistingWordings = hashSetOf<Node>()
+
         document.getElementsIteratorByTagName(DATA_TAG_NAME).forEach { node ->
             val key = node.getAttribute(NAME_ATTRIBUTE)
-            if (wording.containsKey(key)) {
-                val element = node as Element
-
-                // TODO Check behavior with null value ?
-                val valueChild = element.firstOrCreateTagName(VALUE_TAG_NAME)
-                valueChild.textContent = wording.getValue(key)
-
-                wording.getComment(key)?.let { comment ->
-                    val commentChild = element.firstOrCreateTagName(COMMENT_TAG_NAME)
-                    commentChild.textContent = comment
-                }
-
-                outputKeys.add(key)
+            val value = wording.getValue(key)
+            if (value != null) {
+                updateWording(node as Element, value, wording.getComment(key))
+                updatedKeys.add(key)
+            } else {
+                nonExistingWordings.add(node)
             }
         }
+
+        if (removeNonExistingWording) {
+            nonExistingWordings.forEach { it.removeFromParent() }
+        }
+
+        return updatedKeys
     }
 
     private fun addMissingWordings(parent: Element, keys: Iterable<String>, wording: Wording) {
-        keys.forEach { key ->
-            parent.appendNewChild(DATA_TAG_NAME) {
-                setAttribute(NAME_ATTRIBUTE, key)
-                setAttributeNS(XML_NAMESPACE_URI, SPACE_ATTRIBUTE, SPACE_DEFAULT_VALUE)
+        keys.forEach { key -> addWording(parent, key, wording) }
+    }
 
-                wording.getValue(key)?.let { value ->
-                    val valueChild = this.appendNewChild(VALUE_TAG_NAME)
-                    valueChild.appendTextNode(value)
-                }
+    private fun updateWording(element: Element, value: String, comment: String?) {
+        val valueChild = element.firstOrCreateTagName(VALUE_TAG_NAME)
+        valueChild.textContent = value
 
-                wording.getComment(key)?.let { comment ->
-                    val commentChild = this.appendNewChild(COMMENT_TAG_NAME)
-                    commentChild.appendTextNode(comment)
-                }
+        if (comment != null) {
+            val commentChild = element.firstOrCreateTagName(COMMENT_TAG_NAME)
+            commentChild.textContent = comment
+        } else {
+            element.removeChildren(COMMENT_TAG_NAME)
+        }
+    }
+
+    private fun removeWording(node: Node) {
+        node.removeFromParent()
+    }
+
+    private fun addWording(parent: Element, key: String, wording: Wording) {
+        parent.appendNewChild(DATA_TAG_NAME) {
+            setAttribute(NAME_ATTRIBUTE, key)
+            setAttributeNS(XML_NAMESPACE_URI, SPACE_ATTRIBUTE, SPACE_DEFAULT_VALUE)
+
+            wording.getValue(key)?.let { value ->
+                val valueChild = this.appendNewChild(VALUE_TAG_NAME)
+                valueChild.appendTextNode(value)
+            }
+
+            wording.getComment(key)?.let { comment ->
+                val commentChild = this.appendNewChild(COMMENT_TAG_NAME)
+                commentChild.appendTextNode(comment)
             }
         }
     }
