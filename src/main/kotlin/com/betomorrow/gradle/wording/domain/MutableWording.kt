@@ -2,8 +2,8 @@ package com.betomorrow.gradle.wording.domain
 
 class MutableWording(override val language: Language) : Wording {
 
-    private val values = sortedMapOf<String, String>()
-    private val comments = sortedMapOf<String, String>()
+    private val values = linkedMapOf<String, String>()
+    private val comments = linkedMapOf<String, String>()
 
     override val keys: Set<String>
         get() = values.keys

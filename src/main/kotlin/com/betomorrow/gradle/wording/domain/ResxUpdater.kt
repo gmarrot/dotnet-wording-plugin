@@ -6,7 +6,12 @@ import org.w3c.dom.Node
 
 class ResxUpdater(private val path: String) {
 
-    fun update(wording: Wording, addMissingWordings: Boolean, removeNonExistingWording: Boolean): Set<String> {
+    fun update(
+        wording: Wording,
+        addMissingWordings: Boolean = false,
+        removeNonExistingWording: Boolean = false,
+        sortWording: Boolean = false
+    ): Set<String> {
         val document = loadOrCreateResxDocument(path)
 
         val outputKeys = updateData(document, wording, removeNonExistingWording)
@@ -19,12 +24,20 @@ class ResxUpdater(private val path: String) {
             outputKeys.addAll(missingWordings)
         }
 
+        if (sortWording) {
+            sortData(document, wording)
+        }
+
         writeToFile(document, path)
 
         return outputKeys
     }
 
-    private fun updateData(document: Document, wording: Wording, removeNonExistingWording: Boolean): MutableSet<String> {
+    private fun updateData(
+        document: Document,
+        wording: Wording,
+        removeNonExistingWording: Boolean
+    ): MutableSet<String> {
         val updatedKeys = hashSetOf<String>()
         val nonExistingWordings = hashSetOf<Node>()
 
@@ -40,14 +53,10 @@ class ResxUpdater(private val path: String) {
         }
 
         if (removeNonExistingWording) {
-            nonExistingWordings.forEach { it.removeFromParent() }
+            nonExistingWordings.forEach { removeWording(it) }
         }
 
         return updatedKeys
-    }
-
-    private fun addMissingWordings(parent: Element, keys: Iterable<String>, wording: Wording) {
-        keys.forEach { key -> addWording(parent, key, wording) }
     }
 
     private fun updateWording(element: Element, value: String, comment: String?) {
@@ -66,6 +75,10 @@ class ResxUpdater(private val path: String) {
         node.removeFromParent()
     }
 
+    private fun addMissingWordings(parent: Element, keys: Iterable<String>, wording: Wording) {
+        keys.forEach { key -> addWording(parent, key, wording) }
+    }
+
     private fun addWording(parent: Element, key: String, wording: Wording) {
         parent.appendNewChild(DATA_TAG_NAME) {
             setAttribute(NAME_ATTRIBUTE, key)
@@ -82,6 +95,29 @@ class ResxUpdater(private val path: String) {
             }
         }
     }
+
+    private fun sortData(document: Document, wording: Wording) {
+        var i = 0
+        document
+            .getElementsIteratorByTagName(DATA_TAG_NAME)
+            .map { node ->
+                val key = node.getAttribute(NAME_ATTRIBUTE)
+                val sortScore = if (wording.containsKey(key)) {
+                    wording.keys.indexOf(key)
+                } else {
+                    wording.keys.size + i++
+                }
+
+                Pair(node, sortScore)
+            }
+            .sortedWith(compareBy { it.second })
+            .forEach { (node, _) ->
+                val parent = node.parentNode
+                node.removeFromParent()
+                parent.appendChild(node)
+            }
+    }
+
 
     companion object {
         const val ROOT_TAG_NAME = "root"

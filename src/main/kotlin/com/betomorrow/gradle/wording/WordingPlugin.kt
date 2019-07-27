@@ -56,6 +56,7 @@ class WordingPlugin : Plugin<Project> {
                         t.failOnMissingKeys = language.isDefault
                         t.addMissingKeys = wordingExtension.addMissingKeys
                         t.removeNonExistingKeys = wordingExtension.removeNonExistingKeys
+                        t.sortWording = wordingExtension.sortWording
                     }.get()
 
                     task.mustRunAfter(downloadWordingTask)

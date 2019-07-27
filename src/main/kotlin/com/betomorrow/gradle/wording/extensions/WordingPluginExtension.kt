@@ -16,18 +16,19 @@ open class WordingPluginExtension(val project: Project) {
     lateinit var sheetId: String
     var sheetNames: List<String> = emptyList()
 
-    var skipHeaders: Boolean = true
-
-    var filename: String = "wording.xlsx"
+    var filename = "wording.xlsx"
     val wordingFile: File
         get() = project.rootDir.resolve(filename)
 
-    var keysColumn: String = "A"
+    var keysColumn = "A"
     var commentsColumn: String? = null
 
-    var addMissingKeys: Boolean = false
+    var skipHeaders = true
+    
+    var addMissingKeys = false
+    var removeNonExistingKeys = false
 
-    var removeNonExistingKeys: Boolean = false
+    var sortWording = false
 
     var languages: NamedDomainObjectContainer<WordingLanguageExtension> =
         project.container(WordingLanguageExtension::class.java) {

@@ -42,6 +42,9 @@ open class UpdateWordingTask : DefaultTask() {
     @Input
     var removeNonExistingKeys = false
 
+    @Input
+    var sortWording = false
+
     @TaskAction
     fun update() {
         val extractor = XlsxExtractor(source.absolutePath, Column(keysColumn), skipHeaders)
@@ -52,7 +55,7 @@ open class UpdateWordingTask : DefaultTask() {
         logger.info("Updating wording for $languageName to $outputFile.")
 
         val wording = extractor.extract(language, sheetNames)
-        val updatedKeys = updater.update(wording, addMissingKeys, removeNonExistingKeys)
+        val updatedKeys = updater.update(wording, addMissingKeys, removeNonExistingKeys, sortWording)
 
         val missingKeys = wording.keys - updatedKeys
         if (missingKeys.isNotEmpty() && failOnMissingKeys) {

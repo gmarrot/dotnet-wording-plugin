@@ -109,6 +109,7 @@ wording {
     skipHeaders = true                  // Skip headers. Optional, default: true
     addMissingKeys = false              // Add missing key from sheet in wording files. If false, it will throw errors on default wording file when missing keys. Optional, default: false
     removeNonExistingKeys = false       // Remove wording from resx files that not exist in Google Sheet. Optional, default: false
+    sortWording = false                 // Sort wording with Google Sheet file keys order. Optional, default: false
 
     languages {
         'default' {
