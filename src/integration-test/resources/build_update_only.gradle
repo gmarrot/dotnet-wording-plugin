@@ -1,0 +1,32 @@
+plugins {
+    id 'com.betomorrow.dotnet.wording'
+}
+
+wording {
+    credentials = "~/.credentials.json"
+
+    clientId = ""
+    clientSecret = ""
+
+    sheetId = "qwertyuiop"
+    sheetNames = ["commons", "app"]
+    filename = "wording.xlsx"
+    skipHeaders = true
+    keysColumn = "A"
+    commentsColumn = "B"
+
+    languages {
+        'default' {
+            output = "SampleApp/Res/StringResources.resx"
+            column = "C"
+        }
+        'fr' {
+            output = "SampleApp/Res/StringResources.fr.resx"
+            column = "D"
+        }
+        'es' {
+            output = "SampleApp/Res/StringResources.es.resx"
+            column = "E"
+        }
+    }
+}

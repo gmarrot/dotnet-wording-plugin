@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.betomorrow.gradle'
-version '1.0.0-SNAPSHOT'
+version '1.0.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -36,6 +36,7 @@ dependencies {
 
     testCompile 'org.assertj:assertj-core:3.11.1'
     testCompile gradleTestKit()
+    testCompile 'commons-io:commons-io:2.6'
 
     testRuntime 'cglib:cglib-nodep:3.2.4'       // allows mocking of classes (in addition to interfaces)
     testRuntime 'org.objenesis:objenesis:2.4'   // allows mocking of classes without default constructor (together with CGLIB)
@@ -106,10 +107,6 @@ idea {
     }
 }
 
-gradlePlugin {
-    testSourceSets sourceSets.integrationTest
-}
-
 
 /**
  * Publishing
@@ -130,6 +127,8 @@ publishing {
 }
 
 gradlePlugin {
+    testSourceSets sourceSets.integrationTest
+
     plugins {
         wordingPlugin {
             id = 'com.betomorrow.dotnet.wording'

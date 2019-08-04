@@ -113,12 +113,12 @@ class WordingPlugin : Plugin<Project> {
     ): CheckWordingTask? {
         val languageName = language.name.capitalize()
 
-        val validStates = wordingExtension.languageValidWordingStates(language.name)
-        if (validStates.isNullOrEmpty()) {
-            throw GradleException("No valid states specified for wording check")
-        }
-
         return language.statesColumn?.let { statesColumn ->
+            val validStates = wordingExtension.languageValidWordingStates(language.name)
+            if (validStates.isNullOrEmpty()) {
+                throw GradleException("No valid states specified for wording check")
+            }
+
             project.tasks.register("checkWording$languageName", CheckWordingTask::class.java) { t ->
                 t.group = CHECK_GROUP
                 t.description = "Check wording for $languageName language."

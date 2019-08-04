@@ -4,7 +4,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.betomorrow.gradle:dotnet-wording-plugin:1.0.0-SNAPSHOT'
+        classpath 'com.betomorrow.gradle:dotnet-wording-plugin:1.0.0'
     }
 }
 
