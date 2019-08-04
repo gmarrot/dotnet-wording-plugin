@@ -10,6 +10,8 @@ As this plugin has been written in Kotlin and use particular features of the lan
 
 ## Quick Start
 
+### Wording Update
+
 You can create a Google Sheet for your application's wording with one column for keys, one optionally for comments and columns for languages like this :
 
 | Keys          | Comments              | English    | French |
@@ -17,7 +19,7 @@ You can create a Google Sheet for your application's wording with one column for
 | UserFirstName | The user's first name | First Name | Prénom |
 | UserLastName  | The user's last name  | Last Name  | Nom    |
 
-You can find a sample [here](https://docs.google.com/spreadsheets/d/1xIZpaIsHMr1U6uuI6ox8kOPoH6O9A91aiVw21OYVyDQ/edit#gid=0).
+You can find a sample [here](https://docs.google.com/spreadsheets/d/1t_1gM90TfD2A2UbXTghwZ7AklFQMUikyeqlC9lXmLtM/edit#gid=0).
 
 In your project, you need to apply the plugin in your `build.gradle`.
 
@@ -82,6 +84,42 @@ You will see an [authorization request](https://github.com/gmarrot/dotnet-wordin
 
 The plugin will finally update wording files. In this sample, `WordingSampleApp/Resources/StringResources.resx` and `WordingSampleApp/Resources/StringResources.fr.resx`.
 
+### Wording Check
+
+You can specify for each language a states column to check its validity. If you do it, you will also need to set a `validWordingStates` to the wording DSL for share it with all languages or in each one.
+
+Here is an example with three languages (two with shared valid states and one with his own) :
+
+```groovy
+wording {
+    sheetId = "1xIZpaIsHMr1U6uuI6ox8kOPoH6O9A91aiVw21OYVyDQ"
+
+    keysColumn = "A"
+    validWordingStates = ["Validated"]
+
+    languages {
+        "default" {
+            output = "WordingSampleApp/Resources/StringResources.resx"
+            column = "C"
+            statesColumn = "F"
+        }
+        "fr" {
+            output = "WordingSampleApp/Resources/StringResources.fr.resx"
+            column = "E"
+            statesColumn = "F"
+            validWordingStates = ["Validé"]
+        }
+        "es" {
+            output = "WordingSampleApp/Resources/StringResources.es.resx"
+            column = "G"
+            statesColumn = "H"
+        }
+    }
+}
+```
+
+When you specify these two parameters, you can run the wording's check : `./gradlew checkWording`.
+
 ## Tasks
 
 Plugin creates several tasks to manage wording :
@@ -89,8 +127,9 @@ Plugin creates several tasks to manage wording :
 * __downloadWording__ : Export sheet in local .xlsx file that you can commit for later edit. It prevent risks to have unwanted wording changes when you fix bugs.
 * __updateWording__ : Update all wording files.
 * __upgradeWording__ : Download Google Sheet and update all wording files.
+* __checkWording__ : Check the validity of all wording keys for each defined language.
 
-It also creates tasks for each defined languages : updateWordingDefault, updateWordingFr, ...
+It also creates tasks for each defined languages : updateWordingDefault, checkWordingDefault, updateWordingFr, checkWordingFr, ...
 
 ## Complete DSL
 
@@ -106,6 +145,8 @@ wording {
     keysColumn = "A"                    // Optional, default: "A"
     commentsColumn = ""                 // Optional, default: null
 
+    validWordingStates = []             // List of valid states for wording. Optional, default: empty list
+
     skipHeaders = true                  // Skip headers. Optional, default: true
     addMissingKeys = false              // Add missing key from sheet in wording files. If false, it will throw errors on default wording file when missing keys. Optional, default: false
     removeNonExistingKeys = false       // Remove wording from resx files that not exist in Google Sheet. Optional, default: false
@@ -113,12 +154,16 @@ wording {
 
     languages {
         'default' {
-            output "src/main/res/values/strings.xml" // Path and name of the wording file for the language. *Required*
-            column = "B"                             // Column of the language's wording. *Required*
+            output "src/main/res/values/strings.xml"        // Path and name of the wording file for the language. *Required*
+            column = "B"                                    // Column of the language's wording. *Required*
+            statesColumn = ""                               // Column of the wording's state for the language. Optional, default: null
+            validWordingStates = []                         // List of valid states for wording. If not set, it uses the validWordingStates for parent DSL. Optional, default: empty list
         }
         'fr' {
-            output = "src/main/res/values-es/strings.xml" // Path and name of the wording file for the language. *Required*
-            column = "C"                             // Column of the language's wording. *Required*
+            output = "src/main/res/values-es/strings.xml"   // Path and name of the wording file for the language. *Required*
+            column = "C"                                    // Column of the language's wording. *Required*
+            statesColumn = ""                               // Column of the wording's state for the language. Optional, default: null
+            validWordingStates = []                         // List of valid states for wording. If not set, it uses the validWordingStates for parent DSL. Optional, default: empty list
         }
         // [...] Add more languages here
     }

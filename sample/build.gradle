@@ -21,6 +21,7 @@ wording {
     commentsColumn = "B"
 
     sheetNames = ["Sheet 1", "Sheet 2"]
+    validWordingStates = ["Validated"]
 
     addMissingKeys = true
     removeNonExistingKeys = true
@@ -29,14 +30,18 @@ wording {
         "default" {
             output = "WordingSampleApp/Resources/StringResources.resx"
             column = "C"
+            statesColumn = "D"
         }
         "fr" {
             output = "WordingSampleApp/Resources/StringResources.fr.resx"
-            column = "D"
+            column = "E"
+            statesColumn = "F"
         }
         "es" {
             output = "WordingSampleApp/Resources/StringResources.es.resx"
-            column = "E"
+            column = "G"
+            statesColumn = "H"
+            validWordingStates = ["Validated", "To validate"]
         }
     }
 }

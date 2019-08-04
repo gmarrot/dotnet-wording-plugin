@@ -1,9 +1,14 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.wording
 
+import com.betomorrow.gradle.wording.domain.Column
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
 
-class XlsxExtractor(private val path: String, private val keysColumn: Column, private val skipHeaders: Boolean = true) {
+class WordingExtractor(
+    private val path: String,
+    private val keysColumn: Column,
+    private val skipHeaders: Boolean = true
+) {
 
     fun extract(language: Language, sheetNames: List<String> = emptyList()): Wording {
         val wording = MutableWording(language)

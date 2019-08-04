@@ -1,8 +1,15 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.resx
 
+import com.betomorrow.gradle.wording.domain.resx.extensions.newResxDocument
+import com.betomorrow.gradle.wording.domain.wording.Wording
+import com.betomorrow.gradle.wording.kotlin.extensions.*
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import javax.xml.parsers.DocumentBuilderFactory
 
 class ResxUpdater(private val path: String) {
 
@@ -31,6 +38,17 @@ class ResxUpdater(private val path: String) {
         writeToFile(document, path)
 
         return outputKeys
+    }
+
+    private fun loadOrCreateResxDocument(path: String): Document {
+        val documentBuilderFactory = DocumentBuilderFactory.newInstance()
+        val documentBuilder = documentBuilderFactory.newDocumentBuilder()
+
+        return if (Files.isRegularFile(Paths.get(path))) {
+            documentBuilder.parse(File(path))
+        } else {
+            documentBuilder.newResxDocument()
+        }
     }
 
     private fun updateData(
@@ -82,7 +100,11 @@ class ResxUpdater(private val path: String) {
     private fun addWording(parent: Element, key: String, wording: Wording) {
         parent.appendNewChild(DATA_TAG_NAME) {
             setAttribute(NAME_ATTRIBUTE, key)
-            setAttributeNS(XML_NAMESPACE_URI, SPACE_ATTRIBUTE, SPACE_DEFAULT_VALUE)
+            setAttributeNS(
+                XML_NAMESPACE_URI,
+                SPACE_ATTRIBUTE,
+                SPACE_DEFAULT_VALUE
+            )
 
             wording.getValue(key)?.let { value ->
                 val valueChild = this.appendNewChild(VALUE_TAG_NAME)

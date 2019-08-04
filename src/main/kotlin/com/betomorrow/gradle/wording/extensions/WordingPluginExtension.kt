@@ -24,11 +24,13 @@ open class WordingPluginExtension(val project: Project) {
     var commentsColumn: String? = null
 
     var skipHeaders = true
-    
+
     var addMissingKeys = false
     var removeNonExistingKeys = false
 
     var sortWording = false
+
+    var validWordingStates: List<String> = emptyList()
 
     var languages: NamedDomainObjectContainer<WordingLanguageExtension> =
         project.container(WordingLanguageExtension::class.java) {
@@ -37,6 +39,15 @@ open class WordingPluginExtension(val project: Project) {
 
     fun languages(action: Action<NamedDomainObjectContainer<WordingLanguageExtension>>) {
         action.execute(languages)
+    }
+
+    fun languageValidWordingStates(languageName: String): List<String> {
+        val validStates = languages.first { it.name == languageName }.validWordingStates
+        return if (validStates.isNullOrEmpty()) {
+            validWordingStates
+        } else {
+            validStates
+        }
     }
 
 }

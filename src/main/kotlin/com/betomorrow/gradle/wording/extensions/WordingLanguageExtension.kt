@@ -10,6 +10,10 @@ open class WordingLanguageExtension(val name: String, val project: Project) {
 
     lateinit var column: String
 
+    var statesColumn: String? = null
+
+    var validWordingStates: List<String> = emptyList()
+
     val isDefault: Boolean
         get() = name == DEFAULT_NAME
 

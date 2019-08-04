@@ -1,14 +1,18 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.wording
 
+import com.betomorrow.gradle.wording.domain.Column
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class XlsxExtractorTest {
+class WordingExtractorTest {
 
     @Test
     fun `test extract should return correct English wording`() {
         // Given
-        val extractor = XlsxExtractor("src/test/resources/wording.xlsx", Column("A"))
+        val extractor = WordingExtractor(
+            "src/test/resources/wording.xlsx",
+            Column("A")
+        )
         val language = Language("en", "C", "B")
 
         // When
@@ -42,7 +46,10 @@ class XlsxExtractorTest {
     @Test
     fun `test extract should return correct French wording`() {
         // Given
-        val extractor = XlsxExtractor("src/test/resources/wording.xlsx", Column("A"))
+        val extractor = WordingExtractor(
+            "src/test/resources/wording.xlsx",
+            Column("A")
+        )
         val language = Language("fr", "D", "B")
 
         // When
@@ -76,7 +83,10 @@ class XlsxExtractorTest {
     @Test
     fun `test extract should return correct Spanish wording`() {
         // Given
-        val extractor = XlsxExtractor("src/test/resources/wording.xlsx", Column("A"))
+        val extractor = WordingExtractor(
+            "src/test/resources/wording.xlsx",
+            Column("A")
+        )
         val language = Language("en", "E", "B")
 
         // When
@@ -110,7 +120,10 @@ class XlsxExtractorTest {
     @Test
     fun `test extract should return wording containing only given sheets' content`() {
         // Given
-        val extractor = XlsxExtractor("src/test/resources/wording.xlsx", Column("A"))
+        val extractor = WordingExtractor(
+            "src/test/resources/wording.xlsx",
+            Column("A")
+        )
         val language = Language("en", "C", "B")
 
         // When
@@ -129,7 +142,11 @@ class XlsxExtractorTest {
     @Test
     fun `test extract should return correct wording when file has no header`() {
         // Given
-        val extractor = XlsxExtractor("src/test/resources/wording-without-header.xlsx", Column("A"), false)
+        val extractor = WordingExtractor(
+            "src/test/resources/wording-without-header.xlsx",
+            Column("A"),
+            false
+        )
         val language = Language("en", "C", "B")
 
         // When

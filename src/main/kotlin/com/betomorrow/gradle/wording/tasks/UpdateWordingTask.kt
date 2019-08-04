@@ -1,6 +1,10 @@
 package com.betomorrow.gradle.wording.tasks
 
-import com.betomorrow.gradle.wording.domain.*
+import com.betomorrow.gradle.wording.domain.Column
+import com.betomorrow.gradle.wording.domain.MissingKeyException
+import com.betomorrow.gradle.wording.domain.resx.ResxUpdater
+import com.betomorrow.gradle.wording.domain.wording.Language
+import com.betomorrow.gradle.wording.domain.wording.WordingExtractor
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 import java.io.File
@@ -47,7 +51,11 @@ open class UpdateWordingTask : DefaultTask() {
 
     @TaskAction
     fun update() {
-        val extractor = XlsxExtractor(source.absolutePath, Column(keysColumn), skipHeaders)
+        val extractor = WordingExtractor(
+            source.absolutePath,
+            Column(keysColumn),
+            skipHeaders
+        )
         val updater = ResxUpdater(outputFile.absolutePath)
 
         val language = Language(languageName, valuesColumn, commentsColumn)

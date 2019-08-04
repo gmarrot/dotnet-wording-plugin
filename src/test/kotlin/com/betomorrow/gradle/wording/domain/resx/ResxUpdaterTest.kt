@@ -1,5 +1,7 @@
-package com.betomorrow.gradle.wording.domain
+package com.betomorrow.gradle.wording.domain.resx
 
+import com.betomorrow.gradle.wording.domain.wording.Language
+import com.betomorrow.gradle.wording.domain.wording.MutableWording
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.internal.impldep.org.junit.Rule
