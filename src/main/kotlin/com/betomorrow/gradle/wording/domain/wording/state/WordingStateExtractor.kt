@@ -31,7 +31,11 @@ class WordingStateExtractor(
             while (rowIterator.hasNext()) {
                 val row = rowIterator.next()
 
-                val key = row.getCell(keysColumn.index)?.stringCellValue ?: continue
+                val key = row.getCell(keysColumn.index)?.stringCellValue
+                if (key.isNullOrBlank()) {
+                    continue
+                }
+
                 val state = row.getCell(statesColumn.index)?.stringCellValue ?: ""
                 wordingStates.add(WordingState(key, state))
             }

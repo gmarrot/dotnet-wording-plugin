@@ -37,7 +37,7 @@ class WordingExtractor(
                 } else {
                     null
                 }
-                if (key != null && value != null) {
+                if (!key.isNullOrBlank() && value != null) {
                     wording.addOrUpdate(key, value, comment)
                 }
             }

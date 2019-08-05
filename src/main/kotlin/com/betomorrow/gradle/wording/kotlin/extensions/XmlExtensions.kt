@@ -39,7 +39,9 @@ fun writeToFile(document: Document, path: String) {
 }
 
 private fun correctAndWriteFile(writer: StringWriter, path: String) {
-    val outputXmlString = writer.toString().replaceFirst("?>", "?>\n")
+    val outputXmlString = writer.toString()
+        .replaceFirst("?>", "?>\n")
+        .replace("&amp;#", "&#");
     val outputStream = FileOutputStream(File(path))
     outputStream.write(outputXmlString.toByteArray(Charsets.UTF_8))
     outputStream.close()
