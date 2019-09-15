@@ -2,7 +2,14 @@ package com.betomorrow.gradle.wording.domain.resx
 
 import com.betomorrow.gradle.wording.domain.resx.extensions.newResxDocument
 import com.betomorrow.gradle.wording.domain.wording.Wording
-import com.betomorrow.gradle.wording.kotlin.extensions.*
+import com.betomorrow.gradle.wording.kotlin.extensions.appendNewChild
+import com.betomorrow.gradle.wording.kotlin.extensions.appendTextNode
+import com.betomorrow.gradle.wording.kotlin.extensions.firstOrCreateTagName
+import com.betomorrow.gradle.wording.kotlin.extensions.getAttribute
+import com.betomorrow.gradle.wording.kotlin.extensions.getElementsIteratorByTagName
+import com.betomorrow.gradle.wording.kotlin.extensions.removeChildren
+import com.betomorrow.gradle.wording.kotlin.extensions.removeFromParent
+import com.betomorrow.gradle.wording.kotlin.extensions.writeToFile
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -139,7 +146,6 @@ class ResxUpdater(private val path: String) {
                 parent.appendChild(node)
             }
     }
-
 
     companion object {
         const val ROOT_TAG_NAME = "root"

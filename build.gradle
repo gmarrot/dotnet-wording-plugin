@@ -6,8 +6,11 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.31'
 }
 
+apply from: 'gradle/integration-test.gradle'
+apply from: 'gradle/ktlint.gradle'
+
 group 'com.betomorrow.gradle'
-version '1.0.1'
+version '1.0.2-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -31,10 +34,10 @@ dependencies {
     compile 'org.apache.poi:poi-ooxml:4.0.1'
 
     // Testing
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 
-    testCompile 'org.assertj:assertj-core:3.11.1'
+    testCompile 'org.assertj:assertj-core:3.13.2'
     testCompile gradleTestKit()
     testCompile 'commons-io:commons-io:2.6'
 
@@ -52,59 +55,6 @@ compileTestKotlin {
 
 test {
     useJUnitPlatform()
-}
-
-
-/**
- * Integration Tests
- */
-
-sourceSets {
-    integrationTest {
-        java.srcDirs = [ file('src/integration-test/java') ]
-        kotlin.srcDirs = [ file('src/integration-test/kotlin') ]
-        resources.srcDirs = [ file('src/integration-test/resources') ]
-
-        compileClasspath += sourceSets.main.output + configurations.integrationTestCompile
-        runtimeClasspath += output + sourceSets.main.output + configurations.integrationTestRuntime
-    }
-}
-
-configurations {
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestCompileOnly.extendsFrom testCompileOnly
-    integrationTestRuntime.extendsFrom testRuntime
-    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
-    integrationTestAnnotationProcessor.extendsFrom testAnnotationProcessor
-}
-
-compileIntegrationTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-task integrationTest(type: Test, group: JavaBasePlugin.VERIFICATION_GROUP) {
-    description = 'Run the integration tests.'
-
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-
-    outputs.upToDateWhen { false }
-    mustRunAfter test
-
-    useJUnitPlatform()
-}
-
-check.dependsOn integrationTest
-
-idea {
-    module {
-        testSourceDirs += sourceSets.integrationTest.java.srcDirs
-        testSourceDirs += sourceSets.integrationTest.kotlin.srcDirs
-        testResourceDirs += sourceSets.integrationTest.resources.srcDirs
-
-        scopes.TEST.plus += [ configurations.integrationTestCompile, configurations.integrationTestRuntime, configurations.integrationTestAnnotationProcessor ]
-    }
 }
 
 
@@ -156,6 +106,6 @@ publishPlugins {
  */
 
 wrapper {
-    gradleVersion = '5.5.1'
+    gradleVersion = '5.6.1'
     distributionType = Wrapper.DistributionType.ALL
 }

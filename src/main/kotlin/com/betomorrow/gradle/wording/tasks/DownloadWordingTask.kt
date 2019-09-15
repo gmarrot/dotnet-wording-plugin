@@ -3,7 +3,11 @@ package com.betomorrow.gradle.wording.tasks
 import com.betomorrow.gradle.wording.infra.drive.DriveMimeType
 import com.betomorrow.gradle.wording.infra.drive.GoogleDrive
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
 import java.io.File
 
 open class DownloadWordingTask : DefaultTask() {

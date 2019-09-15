@@ -1,5 +1,7 @@
 # Gradle Wording Plugin for .Net Projects
 
+[![Build Status](https://travis-ci.org/gmarrot/dotnet-wording-plugin.svg?branch=master)](https://travis-ci.org/gmarrot/dotnet-wording-plugin)
+
 ## Summary
 
 This plugin allow you to manage .Net application's wording with a simple Google Sheet file. Just create a sheet with columns for keys, wording and comments. The plugin will generate or update existing .resx files. Your product owner will be able to edit himself application's wording.
@@ -25,7 +27,7 @@ In your project, you need to apply the plugin in your `build.gradle`.
 
 ```groovy
 plugins {
-    id "com.betomorrow.dotnet.wording" version "1.0.0"
+    id "com.betomorrow.dotnet.wording" version "1.0.1"
 }
 ```
 
@@ -41,7 +43,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.betomorrow.gradle:dotnet-wording-plugin:1.0.0"
+        classpath "com.betomorrow.gradle:dotnet-wording-plugin:1.0.1"
     }
 }
 

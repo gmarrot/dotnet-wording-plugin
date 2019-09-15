@@ -23,7 +23,6 @@ class MutableWording(override val language: Language) : Wording {
         items[key] = WordingItem(value, if (!comment.isNullOrEmpty()) comment else null)
     }
 
-
     private data class WordingItem(val value: String, val comment: String?)
 
 }

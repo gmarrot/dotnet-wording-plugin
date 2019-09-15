@@ -41,7 +41,7 @@ fun writeToFile(document: Document, path: String) {
 private fun correctAndWriteFile(writer: StringWriter, path: String) {
     val outputXmlString = writer.toString()
         .replaceFirst("?>", "?>\n")
-        .replace("&amp;#", "&#");
+        .replace("&amp;#", "&#")
     val outputStream = FileOutputStream(File(path))
     outputStream.write(outputXmlString.toByteArray(Charsets.UTF_8))
     outputStream.close()
@@ -66,7 +66,6 @@ private fun removeEmptyText(node: Node) {
         child = sibling
     }
 }
-
 
 /**
  * Document Extensions
@@ -98,7 +97,6 @@ fun Document.firstOrCreateTagName(name: String): Element {
     }
 }
 
-
 /**
  * Node Extensions
  */
@@ -110,7 +108,6 @@ fun Node.getAttribute(name: String): String {
 fun Node.removeFromParent(): Node {
     return this.parentNode.removeChild(this)
 }
-
 
 /**
  * Element Extensions
