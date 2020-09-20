@@ -1,6 +1,6 @@
 # Gradle Wording Plugin for .Net Projects
 
-[![Build Status](https://travis-ci.org/gmarrot/dotnet-wording-plugin.svg?branch=master)](https://travis-ci.org/gmarrot/dotnet-wording-plugin)
+[![Build Status](https://travis-ci.com/gmarrot/dotnet-wording-plugin.svg?branch=master)](https://travis-ci.com/gmarrot/dotnet-wording-plugin)
 
 ## Summary
 
