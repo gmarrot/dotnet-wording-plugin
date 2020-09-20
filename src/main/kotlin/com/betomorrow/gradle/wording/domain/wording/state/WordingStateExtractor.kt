@@ -9,7 +9,6 @@ class WordingStateExtractor(
     private val keysColumn: Column,
     private val skipHeaders: Boolean = true
 ) {
-
     fun extract(statesColumn: Column, sheetNames: List<String> = emptyList()): List<WordingState> {
         val wordingStates = mutableListOf<WordingState>()
 
@@ -45,5 +44,4 @@ class WordingStateExtractor(
 
         return wordingStates
     }
-
 }

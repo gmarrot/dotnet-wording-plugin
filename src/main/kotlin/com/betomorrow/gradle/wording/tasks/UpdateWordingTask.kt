@@ -14,7 +14,6 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 
 open class UpdateWordingTask : DefaultTask() {
-
     @InputFile
     lateinit var source: File
 
@@ -74,5 +73,4 @@ open class UpdateWordingTask : DefaultTask() {
             throw MissingKeyException(missingKeys, outputFile.relativeTo(project.rootDir))
         }
     }
-
 }

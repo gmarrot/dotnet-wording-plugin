@@ -9,7 +9,6 @@ class WordingExtractor(
     private val keysColumn: Column,
     private val skipHeaders: Boolean = true
 ) {
-
     fun extract(language: Language, sheetNames: List<String> = emptyList()): Wording {
         val wording = MutableWording(language)
 
@@ -47,5 +46,4 @@ class WordingExtractor(
 
         return wording
     }
-
 }

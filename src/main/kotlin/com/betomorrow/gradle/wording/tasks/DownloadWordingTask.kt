@@ -11,7 +11,6 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 
 open class DownloadWordingTask : DefaultTask() {
-
     @Input
     @Optional
     var clientId: String? = null
@@ -50,5 +49,4 @@ open class DownloadWordingTask : DefaultTask() {
         logger.info("Download $fileId to $output.")
         googleDrive.downloadFile(fileId, DriveMimeType.XLSX, output)
     }
-
 }

@@ -18,8 +18,9 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 
-class ResxUpdater(private val path: String) {
-
+class ResxUpdater(
+    private val path: String
+) {
     fun update(
         wording: Wording,
         addMissingWordings: Boolean = false,
@@ -160,5 +161,4 @@ class ResxUpdater(private val path: String) {
 
         const val XML_NAMESPACE_URI = "http://www.w3.org/XML/1998/namespace"
     }
-
 }

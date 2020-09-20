@@ -10,8 +10,8 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+@Suppress("UNUSED")
 class WordingPlugin : Plugin<Project> {
-
     override fun apply(target: Project) {
         with(target) {
             extensions.create(WORDING_EXTENSION_NAME, WordingPluginExtension::class.java, project)
@@ -140,5 +140,4 @@ class WordingPlugin : Plugin<Project> {
         const val GROUP = "Wording"
         const val CHECK_GROUP = "Check Wording"
     }
-
 }

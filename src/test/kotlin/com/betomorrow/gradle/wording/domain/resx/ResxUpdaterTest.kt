@@ -2,7 +2,6 @@ package com.betomorrow.gradle.wording.domain.resx
 
 import com.betomorrow.gradle.wording.domain.wording.Language
 import com.betomorrow.gradle.wording.domain.wording.MutableWording
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.internal.impldep.org.junit.Rule
 import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder
@@ -13,7 +12,6 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 class ResxUpdaterTest {
-
     @Rule
     val testProjectDir = TemporaryFolder()
 
@@ -37,15 +35,17 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(copy.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-            addOrUpdate("key4", "Another value 4", "Comment 4")
-        })
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+                addOrUpdate("key4", "Another value 4", "Comment 4")
+            }
+        )
 
         // Then
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
 
     @Test
@@ -59,13 +59,16 @@ class ResxUpdaterTest {
 
         val updater = ResxUpdater(copy.toString())
 
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-        }, addMissingWordings = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+            },
+            addMissingWordings = true
+        )
 
-        Assertions.assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
 
     @Test
@@ -81,14 +84,17 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(copy.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-        }, removeNonExistingWording = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+            },
+            removeNonExistingWording = true
+        )
 
         // Then
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
 
     @Test
@@ -104,14 +110,18 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(copy.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-        }, addMissingWordings = true, removeNonExistingWording = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+            },
+            addMissingWordings = true,
+            removeNonExistingWording = true
+        )
 
         // Then
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
 
     @Test
@@ -125,14 +135,17 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(dest.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-        }, addMissingWordings = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+            },
+            addMissingWordings = true
+        )
 
         // Then
-        assertThat(dest).hasSameContentAs(Paths.get(expected))
+        assertThat(dest).hasSameTextualContentAs(Paths.get(expected))
     }
 
     // Sort tests
@@ -150,15 +163,18 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(copy.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-            addOrUpdate("key4", "Another value 4", "Comment 4")
-        }, sortWording = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+                addOrUpdate("key4", "Another value 4", "Comment 4")
+            },
+            sortWording = true
+        )
 
         // Then
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
 
     @Test
@@ -174,15 +190,19 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(copy.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-            addOrUpdate("key4", "Another value 4", "Comment 4")
-        }, addMissingWordings = true, sortWording = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+                addOrUpdate("key4", "Another value 4", "Comment 4")
+            },
+            addMissingWordings = true,
+            sortWording = true
+        )
 
         // Then
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
 
     @Test
@@ -198,15 +218,19 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(copy.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-            addOrUpdate("key4", "Another value 4", "Comment 4")
-        }, removeNonExistingWording = true, sortWording = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+                addOrUpdate("key4", "Another value 4", "Comment 4")
+            },
+            removeNonExistingWording = true,
+            sortWording = true
+        )
 
         // Then
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
 
     @Test
@@ -222,15 +246,19 @@ class ResxUpdaterTest {
         val updater = ResxUpdater(copy.toString())
 
         // When
-        updater.update(MutableWording(language).apply {
-            addOrUpdate("key1", "Another value 1", "Comment 1")
-            addOrUpdate("key2", "Another value 2", null)
-            addOrUpdate("key3", "Another value 3", "Comment 3")
-            addOrUpdate("key4", "Another value 4", "Comment 4")
-        }, addMissingWordings = true, removeNonExistingWording = true, sortWording = true)
+        updater.update(
+            MutableWording(language).apply {
+                addOrUpdate("key1", "Another value 1", "Comment 1")
+                addOrUpdate("key2", "Another value 2", null)
+                addOrUpdate("key3", "Another value 3", "Comment 3")
+                addOrUpdate("key4", "Another value 4", "Comment 4")
+            },
+            addMissingWordings = true,
+            removeNonExistingWording = true,
+            sortWording = true
+        )
 
         // Then
-        assertThat(copy).hasSameContentAs(Paths.get(expected))
+        assertThat(copy).hasSameTextualContentAs(Paths.get(expected))
     }
-
 }

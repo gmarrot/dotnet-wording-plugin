@@ -18,8 +18,9 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 
-class GoogleDrive(private val tokenDirectory: String = TOKENS_DIRECTORY_PATH) {
-
+class GoogleDrive(
+    private val tokenDirectory: String = TOKENS_DIRECTORY_PATH
+) {
     private var credentials: File? = null
     private var clientId: String? = null
     private var clientSecret: String? = null
@@ -40,11 +41,9 @@ class GoogleDrive(private val tokenDirectory: String = TOKENS_DIRECTORY_PATH) {
             return GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, SCOPES)
         }
 
-        val credentialStream = if (credentials != null) {
-            FileInputStream(credentials)
-        } else {
-            GoogleDrive::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
-        }
+        val credentialStream = credentials
+            ?.let { FileInputStream(it) }
+            ?: GoogleDrive::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
 
         val clientSecrets = GoogleClientSecrets.load(jsonFactory, InputStreamReader(credentialStream))
 
@@ -98,5 +97,4 @@ class GoogleDrive(private val tokenDirectory: String = TOKENS_DIRECTORY_PATH) {
         private val SCOPES = listOf(DriveScopes.DRIVE)
         private val jsonFactory = JacksonFactory.getDefaultInstance()
     }
-
 }

@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class WordingExtractorTest {
-
     @Test
     fun `test extract should return correct English wording`() {
         // Given
@@ -161,5 +160,4 @@ class WordingExtractorTest {
         assertThat(en.getValue("key2")).isEqualTo("Value 2")
         assertThat(en.getComment("key2")).isEqualTo("Sample key 2")
     }
-
 }

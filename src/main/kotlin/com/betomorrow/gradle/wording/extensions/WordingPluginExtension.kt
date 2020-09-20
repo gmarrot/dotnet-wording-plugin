@@ -7,8 +7,9 @@ import java.io.File
 
 const val WORDING_EXTENSION_NAME = "wording"
 
-open class WordingPluginExtension(val project: Project) {
-
+open class WordingPluginExtension(
+    private val project: Project
+) {
     var credentials: String? = null
     var clientId: String? = null
     var clientSecret: String? = null
@@ -49,5 +50,4 @@ open class WordingPluginExtension(val project: Project) {
             validStates
         }
     }
-
 }

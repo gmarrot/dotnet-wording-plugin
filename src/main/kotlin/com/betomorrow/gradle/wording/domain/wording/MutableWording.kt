@@ -1,7 +1,8 @@
 package com.betomorrow.gradle.wording.domain.wording
 
-class MutableWording(override val language: Language) : Wording {
-
+class MutableWording(
+    override val language: Language
+) : Wording {
     private val items = linkedMapOf<String, WordingItem>()
 
     override val keys: Set<String>
@@ -23,6 +24,8 @@ class MutableWording(override val language: Language) : Wording {
         items[key] = WordingItem(value, if (!comment.isNullOrEmpty()) comment else null)
     }
 
-    private data class WordingItem(val value: String, val comment: String?)
-
+    private data class WordingItem(
+        val value: String,
+        val comment: String?
+    )
 }

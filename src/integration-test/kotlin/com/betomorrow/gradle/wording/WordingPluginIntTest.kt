@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 class WordingPluginIntTest {
-
     @Rule
     val testProjectDir = TemporaryFolder()
 
@@ -188,5 +187,4 @@ class WordingPluginIntTest {
             """.trimIndent()
         )
     }
-
 }

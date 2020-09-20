@@ -31,7 +31,13 @@ task integrationTest(type: Test, group: JavaBasePlugin.VERIFICATION_GROUP) {
     outputs.upToDateWhen { false }
     mustRunAfter test
 
-    useJUnitPlatform()
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
 }
 
 check.dependsOn integrationTest

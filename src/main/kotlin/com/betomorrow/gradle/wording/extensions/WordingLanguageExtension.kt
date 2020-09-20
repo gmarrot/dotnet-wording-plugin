@@ -4,8 +4,10 @@ import org.gradle.api.GradleException
 import org.gradle.api.Project
 import java.io.File
 
-open class WordingLanguageExtension(val name: String, val project: Project) {
-
+open class WordingLanguageExtension(
+    val name: String,
+    private val project: Project
+) {
     lateinit var output: String
 
     lateinit var column: String
@@ -30,5 +32,4 @@ open class WordingLanguageExtension(val name: String, val project: Project) {
     companion object {
         const val DEFAULT_NAME = "default"
     }
-
 }

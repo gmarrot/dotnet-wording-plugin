@@ -12,7 +12,6 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 
 open class CheckWordingTask : DefaultTask() {
-
     @InputFile
     lateinit var source: File
 
@@ -53,5 +52,4 @@ open class CheckWordingTask : DefaultTask() {
     private fun logInvalidWording(wordingState: WordingState) {
         logger.error("Invalid state for key '${wordingState.key}': '${wordingState.state}'")
     }
-
 }

@@ -1,12 +1,10 @@
 package com.betomorrow.gradle.wording.domain.wording.state
 
 import com.betomorrow.gradle.wording.domain.Column
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class WordingStateExtractorTest {
-
     @Test
     fun `test extract should return correct English wording state`() {
         // Given
@@ -19,7 +17,6 @@ class WordingStateExtractorTest {
         val en = extractor.extract(Column("D"))
 
         // Then
-        assertThat(en).hasSize(7)
         assertThat(en).containsExactly(
             WordingState("key1", "Validated"),
             WordingState("key2", "Validated"),
@@ -43,7 +40,6 @@ class WordingStateExtractorTest {
         val fr = extractor.extract(Column("F"))
 
         // Then
-        assertThat(fr).hasSize(7)
         assertThat(fr).containsExactly(
             WordingState("key1", "Validated"),
             WordingState("key2", ""),
@@ -67,7 +63,6 @@ class WordingStateExtractorTest {
         val es = extractor.extract(Column("H"))
 
         // Then
-        assertThat(es).hasSize(7)
         assertThat(es).containsExactly(
             WordingState("key1", "Validated"),
             WordingState("key2", "Validated"),
@@ -91,7 +86,6 @@ class WordingStateExtractorTest {
         val en = extractor.extract(Column("D"), listOf("Sheet 2"))
 
         // Then
-        assertThat(en).hasSize(2)
         assertThat(en).containsExactly(
             WordingState("key6", "Validated"),
             WordingState("key7", "Validated")
@@ -111,7 +105,6 @@ class WordingStateExtractorTest {
         val en = extractor.extract(Column("D"))
 
         // Then
-        Assertions.assertThat(en).hasSize(7)
         assertThat(en).containsExactly(
             WordingState("key1", "Validated"),
             WordingState("key2", "Validated"),
@@ -122,5 +115,4 @@ class WordingStateExtractorTest {
             WordingState("key7", "Validated")
         )
     }
-
 }

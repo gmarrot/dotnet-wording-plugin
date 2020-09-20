@@ -1,7 +1,8 @@
 package com.betomorrow.gradle.wording.domain
 
-class Column(val name: String) {
-
+class Column(
+    val name: String
+) {
     val index: Int
 
     init {
@@ -19,5 +20,4 @@ class Column(val name: String) {
     companion object {
         val pattern = Regex("^[a-zA-Z]*$")
     }
-
 }
